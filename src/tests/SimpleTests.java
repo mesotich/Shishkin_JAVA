@@ -1,43 +1,65 @@
 package tests;
 
-import main.Slava;
+import main.Array;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 public class SimpleTests {
 
-    private final String none = "Нет такого имени";
+    private ByteArrayOutputStream bos;
+    private PrintStream ps;
+
+    @Before
+    public void changeOut() {
+        ps = System.out;
+        bos = new ByteArrayOutputStream();
+        PrintStream stream = new PrintStream(bos);
+        System.setOut(stream);
+    }
 
     @Test
     public void testSimple1() {
-        String actual = Slava.helloSlava("asfasfasf");
-        Assert.assertEquals(none, actual);
+        Array.multiplesOfThree(new int[]{1, 3, 2, 6, 4, 9});
+        String expected = "3" + System.lineSeparator() + "6" + System.lineSeparator() + "9" + System.lineSeparator();
+        Assert.assertEquals(expected, bos.toString());
     }
 
     @Test
     public void testSimple2() {
-        String actual = Slava.helloSlava("");
-        Assert.assertEquals(none, actual);
+        Array.multiplesOfThree(null);
+        String expected = "";
+        Assert.assertEquals(expected, bos.toString());
     }
+
     @Test
     public void testSimple3() {
-        String actual = Slava.helloSlava(null);
-        Assert.assertEquals(none, actual);
+        Array.multiplesOfThree(new int[]{1});
+        String expected = "";
+        Assert.assertEquals(expected, bos.toString());
     }
+
     @Test
     public void testSimple4() {
-        String actual = Slava.helloSlava("вячеслав");
-        Assert.assertEquals(none, actual);
+        Array.multiplesOfThree(new int[]{});
+        String expected = "";
+        Assert.assertEquals(expected, bos.toString());
     }
+
     @Test
     public void testSimple5() {
-        String actual = Slava.helloSlava("Вячеслав1");
-        Assert.assertEquals(none, actual);
+        Array.multiplesOfThree(new int[]{9});
+        String expected = "9" + System.lineSeparator();
+        Assert.assertEquals(expected, bos.toString());
     }
-    @Test
-    public void testSimple6() {
-        String actual = Slava.helloSlava("Вячеслав");
-        Assert.assertEquals("Привет, Вячеслав", actual);
+
+    @After
+    public void returnOut() {
+        System.setOut(ps);
     }
 }
 
